@@ -1,0 +1,36 @@
+{
+  "name": "prez-webpack-2",
+  "version": "1.0.0",
+  "description": "A presentation about webpack 2",
+  "main": "index.html",
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "webpack -p",
+    "deploy": "npm run build && gh-pages -d build -m 'Commit through bot' && rm -r build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:moorthy-g/prez-webpack-2.git"
+  },
+  "keywords": [
+    "presentation",
+    "webpack"
+  ],
+  "author": "moorthy.g@krds.fr",
+  "license": "WTFPL",
+  "dependencies": {
+    "reveal.js": "^3.4.1"
+  },
+  "devDependencies": {
+    "css-loader": "^0.26.1",
+    "extract-text-webpack-plugin": "2.0.0-rc.1",
+    "file-loader": "^0.10.0",
+    "gh-pages": "^0.12.0",
+    "html-loader": "^0.4.4",
+    "html-webpack-plugin": "^2.28.0",
+    "style-loader": "^0.13.1",
+    "uglify-loader": "^1.4.0",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.3.0"
+  }
+}
