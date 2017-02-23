@@ -1,0 +1,66 @@
+::selection {
+	color: #111 !important;
+	background: white !important;
+}
+::-moz-selection {
+	color: #111 !important;
+	background: white !important;
+}
+div.reveal pre {
+	box-shadow: none;
+	width: auto;
+}
+div.reveal pre code {
+	padding: 25px;
+}
+.current-only {
+	display: none !important;
+}
+.current-only.current-fragment {
+	display: block !important;
+}
+#indexSlide {
+	width: 100%;
+	height: 400px;
+	position: relative;
+}
+#indexSlide::after {
+	content: '';
+	background-color: #2B3A42;
+	width: 100%;
+	padding-bottom: 5%;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.line {
+	display: block;
+}
+.line.focus, .line.highlight {
+	background-color: #fff;
+	font-weight: bold;
+	opacity: 1;
+}
+.line.focus, .line.focus *, .line.highlight, .line.highlight * {
+	color: #000 !important;
+}
+.darkCodeBlock code {
+	background: #111;
+}
+p.caution {
+	background: url('../img/caution.png');
+    color: #000;
+    font-size: 0.8em;
+    font-weight: bold;
+    line-height: 1;
+    box-sizing: border-box;
+	width: 228px;
+	height: 400px;
+	position: absolute;
+	top: 0;
+	right: 0;
+    padding: 15% 10px 0 10px;
+    margin: 0;
+    -webkit-transform: rotate(-10deg);
+    transform: rotate(-10deg);
+}

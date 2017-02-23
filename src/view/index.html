@@ -8,10 +8,647 @@
 <body>
     <div class="reveal">
         <div class="slides">
-            <section>
+            <section id="introduction" data-background-color="#2B3A42">
                 <h1>Webpack 2</h1>
+                <div id="indexSlide">
+                    <iframe data-src="https://webpack.js.org/" scrolling="no" width="100%" height="100%"></iframe>
+                </div>
+                <aside class="notes">
+                    <ol>
+                        <li></li>
+                        <li>
+                            Webpack in simple words, is a module bundler.
+                        </li>
+                        <li>
+                            Module bundling is meant to reduce the http request to speedup the apps in http/1.1
+                            The new http/2 protocol addresses this issue &amp; request multiple file in one request.
+                        </li>
+                        <li>Also meant to insist module programming.</li>
+                        <li>
+                            Webpack can bundle everything into a single js file ( js, css, image, audio, video ).
+                            But, for the goodness of human race, Its not recommended.
+                            This is an extreme usecase of webpack.
+                        </li>
+                        <li>In webpack, everything is module. Not just javascript</li>
+                        <li>
+                            It can do job of a task runner &amp; a module bundler.
+                            with a proper configuration.
+                        </li>
+                        <li>
+                            The concepts may hard to grab initially.
+                            Apparently, It improve your workflow drastically
+                        </li>
+                        <li>
+                            Best fit for React projects.
+                        </li>
+                    </ol>
+                </aside>
             </section>
+            <section id="installation">
+                <h2>Installation</h2>
+                <pre>
+                    <code data-trim>
+                        npm <span class="hljs-keyword">install</span> webpack <span class="hljs-built_in">--save-dev</span>
+                    </code>
+                </pre>
+                <div style='margin-top: -50px'></div>
+                <div data-markdown class="fragment"><script type="text/template">
+                    ```js
+                    //webpack.config.js
+                    module.exports = {
+                        entry: './path/to/my/entry/file.js',
+                        output: {
+                            path: './path/to/my/build-directory ',
+                            filename: 'my.webpack.bundle.js'
+                        }
+                    };
+                    ```
+                </script></div>
+                <div data-markdown class="fragment"><script type="text/template">
+                    ```bash
+                    $ webpack --watch       #development
+                    $ webpack -p            #build
+
+                    # via npm scripts
+                    ```
+                </script></div>
+            </section>
+            <section id="core_concepts">
+                <h2>Core concepts</h2>
+                <div data-markdown class="fragment"><script type="text/template">
+                    ```js
+                    let path = require('path'),
+                    HtmlWebpackPlugin = require('html-webpack-plugin');
+
+                    module.exports = {
+
+                        entry: path.resolve(__dirname, 'src/js/index.js'),//or
+
+                        entry: [ './src/js/index.js', './src/js/anotherIndex.js', ...   ],//or
+
+                        entry: {
+                            'index': path.resolve(__dirname, 'src/js/index.js'),
+                            'anotherIndex': path.resolve(__dirname, 'src/js/anotherIndex.js')
+                        },
+
+                        output: {
+                            path: path.resolve(__dirname, 'build'),
+                            filename: 'app.bundle.js'
+                        },
+
+                        module: {
+                            rules: [
+                            {
+                                test: /\.css$/,
+                                loader: 'style-loader!css-loader'
+                            },
+                            {
+                                test: /\.(jpe?g|png|gif|webp)$/,
+                                loader: 'file-loader?name=./img/[name].[ext]'
+                            }
+                            ]
+                        },
+
+                        plugins: [
+                            new HtmlWebpackPlugin({
+                                template: path.resolve(__dirname, 'src/view/index.html')
+                            }),
+                            new SomeotherPlugin()
+                        ]
+
+                    }
+                    ```
+                    <p class="fragment current-only" data-code-focus='6'>Entry</p>
+                    <p class="fragment current-only" data-code-focus='8'>Entry</p>
+                    <p class="fragment current-only" data-code-focus='10-13'>Entry</p>
+                    <p class="fragment current-only" data-code-focus='15-18'>Output</p>
+                    <p class="fragment current-only" data-code-focus='20-31'>Loaders</p>
+                    <p class="fragment current-only" data-code-focus='33-38'>Plugins</p>
+                </script></div>
+                <aside class="notes">
+                    <ol>
+                        <li>
+                            <b>Loaders</b> -
+                            Helps to extend webpack's behaviour.
+                            It can perform transformation, preprocessing files
+                        </li>
+                        <li>Chainable</li>
+                        <li>We can configure them via query parameters</li>
+                        <li>Loaders should be installed via npm</li>
+                    </ol>
+                </aside>
+            </section>
+            <section id="dependency_expressions">
+                <h2>Dependency expressions</h2>
+                <ul>
+                    <li class="fragment">ES6 <code class="hljs-built_in">import</code> statement</li>
+                    <li class="fragment">Commonjs <code class="hljs-built_in">require()</code> statement</li>
+                    <li class="fragment">AMD <code class="hljs-built_in">define</code> or <code class="hljs-built_in">require</code> statement</li>
+                    <li class="fragment"><code class="hljs-built_in">@import</code> statement inside stylesheets. <small style="vertical-align:baseline">(loader required)</small></li>
+                    <li class="fragment">Any urls inside stylesheet <code class="hljs-built_in">url(...)</code> or html file <code class="hljs-built_in"> &lt;img src='...' /&gt; </code> <small style="vertical-align:baseline">(loader required)</small></li>
+                    <li class="fragment">Auto module injection <small style="vertical-align:baseline">(plugin required)</small> </li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>The way you tell webpack about file dependencies</li>
+                        <li>Lot of module systems are there in js. Webpack supports most of them</li>
+                        <li>It has special behaviours. It can handle CSS, HTML dependencies as well</li>
+                        <li>Better practise is to follow a single pattern thorough out the project</li>
+                    </ul>
+                </aside>
+            </section>
+            <section id="resolving_paths">
+                <h2>Resolving Paths</h2>
+                <div style="min-height: 500px">
+                    <div data-markdown class="fragment fade-up"><script type="text/template">
+                        ```js
+                        //Absolute Paths
+                        import MyModule from '/path/to/mymodule.js' //or
+                        let MyModule = require('/path/to/mymodule.js')
+                        ```
+                    </script></div>
+                    <div data-markdown class="fragment fade-up"><script type="text/template">
+                        ```js
+                        //Relative Paths
+                        import ParentModule from '../path/to/parentmodule.js'
+                        import MyModule from './path/to/mymodule.js'
+                        ```
+                    </script></div>
+                    <div data-markdown class="fragment fade-up"><script type="text/template">
+                        ```js
+                        //Module Paths
+                        import $ from 'jquery'
+                        import Promise from 'es-promise'
+                        import 'jquery-autocomplete'
+                        import 'jquery-autocomplete/jquery-autocomplete.css'
+                        ```
+                        <small>Module paths defaults to node_modules or bower_components</small>
+                    </script></div>
+                </div>
+                <aside class="notes">
+                    <ul>
+                        <li>Its important to know how webpack locates the dependencies</li>
+                    </ul>
+                </aside>
+            </section>
+            <section id="naming_keywords">
+                <h2>Naming keywords</h2>
+                <div data-markdown class="fragment fade-up " style="font-size: 0.9em;"><script type="text/template">
+                    ```js
+                    {
+                        output: {
+                            filename: "[name].build.[ext]" //main.build.js
+                            filename: "[hash].build.js" //0dcbbaa701328a3c262cfd45869e351f.build.js
+                            filename: "[hash:8].build.js" //0dcbbaa7.build.js
+                            filename: "[chunkhash].build.js" //c31e9820c001c9c4a86bce33ce43b679.build.js
+                            filename: "[chunkhash:8].build.js" //c31e9820.build.js
+                            filename: "[name].[chunkhash:8].[ext]" //main.c31e9820.js
+                            filename: "./js/[name].[chunkhash:8].[ext]" // js/main.c31e9820.js
+                        },
+                        module: {
+                            rules: [{
+                                test: /\.(jpe?g|png|gif|webp)$/,
+                                loader: 'file-loader?name=./img/[name].[hash:8].[ext]'
+                                // ./img/myimage.7f579820.jpg
+                            }]
+                        }
+                    }
+                    ```
+                    <p class="fragment current-only" data-code-focus="3">Refer the orignal name &amp; extension</p>
+                    <p class="fragment current-only" data-code-focus="4">Hash is generated per build</p>
+                    <p class="fragment current-only" data-code-focus="5">Hash can be trimmed</p>
+                    <p class="fragment current-only" data-code-focus="6-7">Chunkhash is generated based on chunk content</p>
+                    <p class="fragment current-only" data-code-focus="8">Mix them in any combinations</p>
+                    <p class="fragment current-only" data-code-focus="9">Prefix directory name</p>
+                    <p class="fragment current-only" data-code-focus="14-15" style="font-size:0.9em">Hash might have different behaviour in few loaders &amp; plugins</p>
+                </script></div>
+            </section>
+            <section id="example">
+                <h2>Example</h2>
+                <div data-markdown style="width:49%;float:left">
+                    ```js
+                    //forest.js
+                    import Tree from './tree';
+                    import Water from './water';
+                    let tree = new Tree();
+                    let water = new Water();
+                    tree.pour(water);
+                    ...
+                    ```
+                    ```js
+                    //tree.js
+                    import Leaf from './leaf';
+                    import Root from './root';
+                    import './colors.css';
+                    class Tree {
+                        ....
+                    }
+                    export default Tree;
+                    ```
+                </div>
+                <div data-markdown style="width:49%;float:right;zoom:0.87">
+                    ```js
+                    //water.js
+                    class Water { .... }
+                    export default Water;
+                    ```
+                    ```js
+                    //leaf.js
+                    class Leaf { .... }
+                    export default Leaf;
+                    ```
+                    ```js
+                    //root.js
+                    class Root { .... }
+                    export default Root;
+                    ```
+                    ```css
+                    /* colors.css */
+                    .leaf { color: green; }
+                    .root { color: brown; }
+                    .water { color: transparent; }
+                    ```
+                </div>
+                <div class="fragment zoom-in" style="position: absolute; left:-3%; top: 20%; right:-3%; bottom:3%; background:rgba(0,0,0,0.9);">
+                    <p><img src="../img/logo.png" width="200" alt="" style="border:none;background:none;margin:10% 0 0" /></p>
+                    <code>forest.1234abcd.js</code><br/>
+                    <small>contains js dependencies, css &amp; webpack bootstrap code</small>
+                </div>
+                <aside class="notes">
+                    <p>So far, we've done with the basic essentials</p>
+                </aside>
+            </section>
+            <section id="code_splitting" data-transition="slide" data-background-color="#26273c">
+                <h2>Code splitting</h2>
+                <p>split the output bundle into multiple files (chunks)</p>
+                <aside class="notes">
+                    <ol>
+                        <li>load one MB of js, not good</li>
+                        <li>Leverage browser cache system</li>
+                    </ol>
+                </aside>
+            </section>
+            <section id="vendor_code_splitting" data-background-color="#26273c" data-transition="slide">
+                <h2>Vendor code splitting</h2>
+                <div data-markdown style="font-size: 0.8em">
+                    ```js
+                    //main.js
+                    import $ from 'jquery'
+                    import Promise from 'es6-promise'   ...
+                    ```
+                </div>
+                <aside class="notes">
+                    <ol>
+                        <li>Vendor codes are common in a typical app</li>
+                        <li>Mostly, vendor code doesn't change. App code changes frequently</li>
+                        <li>So, seperate vendor code</li>
+                        <li>Keep the hash constant for vendor chunk</li>
+                    </ol>
+                </aside>
+                <section id="vendor_code_splitting_1" data-transition="fade">
+                    <div class="fragment" data-markdown style="padding-top: 5%">
+                        ```js
+                        module.exports = {
+                            entry: './main.js',
+                            output: {
+                                path: path.resolve( __dirname, 'build' ),
+                                filename: '[name].[chunkhash:8].js'
+                            }
+                        } ...
+                        ```
+                    </div>
+                </section>
+                <section id="vendor_code_splitting_2" data-transition="fade" style="margin-top:12%">
+                    <div data-markdown data-highlight='1,2,3,4'>
+                        ```js
+                        module.exports = {
+                            entry: {
+                                main: './main.js', //main.9897dsfd.js
+                                lib: [ 'jquery', 'es6-promise' ] //lib.2144546.js
+                            },
+                            output: {
+                                path: path.resolve( __dirname, 'build' ),
+                                filename: '[name].[chunkhash:8].js'
+                            }
+                            ...
+                        }
+                        ```
+                        *1.* Use multiple entries
+                    </div>
+                    <p class="fragment caution">Code Duplication</p>
+                </section>
+                <section id="vendor_code_splitting_3" data-transition="fade" style="margin-top:4%">
+                    <div data-markdown data-highlight='0,11,12,13'>
+                        ```js
+                        const webpack = require('webpack');
+                        module.exports = {
+                            entry: {
+                                main: './main.js', //main.9897dsfd.js
+                                lib: [ 'jquery', 'es6-promise' ] //lib.2144546.js
+                            },
+                            output: {
+                                path: path.resolve( __dirname, 'build' ),
+                                filename: '[name].[chunkhash:8].js'
+                            },
+                            plugins: [
+                                new webpack.optimize.CommonsChunkPlugin({
+                                    name: 'lib' //common bundle's name.
+                                })
+                            ]
+                        }
+                        ...
+                        ```
+                        *2.* Add webpack's "CommonsChunkPlugin"
+                    </div>
+                    <p class="fragment caution">Uncertain hash</p>
+                </section>
+                <section id="vendor_code_splitting_4" data-transition="fade" style="margin-top:4%">
+                    <div data-markdown data-highlight='12'>
+                        ```js
+                        const webpack = require('webpack');
+                        module.exports = {
+                            entry: {
+                                main: './main.js', //main.9897dsfd.js
+                                lib: [ 'jquery', 'es6-promise' ] //lib.2144546.js
+                            },
+                            output: {
+                                path: path.resolve( __dirname, 'build' ),
+                                filename: '[name].[chunkhash:8].js'
+                            },
+                            plugins: [
+                                new webpack.optimize.CommonsChunkPlugin({
+                                    names: [ 'lib', 'manifest' ] // libs + extracted manifest
+                                })
+                            ]
+                        }
+                        ...
+                        ```
+                        *3.* Extract manifest (webpack's runtime code)
+                    </div>
+                </section>
+                <section id="vendor_code_splitting_5" style="margin-top:5%" data-transition="slide">
+                    <div data-markdown>
+                        Build files
+                        ```bash
+                        1. manifest.1sd1sd13.js
+                        2. lib.9sd8sd9t.js
+                        3. main.2sd5sds4.js
+                        ```
+                    </div>
+                </section>
+            </section>
+            <section id="css_splitting_1" data-background-color="#26273c" data-transition="slide">
+                <h2>CSS splitting</h2>
+                <p>CSS inside a js module, <br />
+                    <span class="fragment current-only">doesn't load asyc &amp; parallel</span>
+                    <span class="fragment">causes Flash of unstyled content - FOUC</span>
+                </p>
+                <h4 class="fragment">Extract CSS bundle from JS  module</h4>
+            </section>
+            <section id="css_splitting_2" data-background-color="#26273c" data-transition="fade">
+                <h2>CSS splitting</h2>
+                <p>ExtractTextWebpackPlugin</p>
+                <div data-markdown style="font-size:0.95em"><script type="text/template">
+                    ```js
+                    const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+                    module.exports = {
+                        module: {
+                            rules: [{
+                                test: /.css$/,
+                                loader: ExtractTextPlugin.extract({
+                                    loader: 'css-loader'
+                                })
+                            }]
+                            ...
+                        }
+                        plugins: [
+                            new ExtractTextPlugin('[name].[contenthash:8].css')
+                        ]
+                    }
+                    ```
+                    <p class="fragment" data-code-focus="1"></p>
+                    <p class="fragment" data-code-focus="7-9"></p>
+                    <p class="fragment" data-code-focus="14"></p>
+                </script></div>
+            </section>
+            <section id="css_splitting_3" data-background-color="#26273c" data-transition="fade">
+                <h2>CSS splitting</h2>
+                <p>Build files</p>
+                <div data-markdown>
+                    ```bash
+                    1. manifest.1sd1sd13.js
+                    2. lib.9sd8sd9t.js
+                    3. main.2sd5sds4.js
+                    4. main.568s4878.css #Extracted css bundle
+                    ```
+                </div>
+            </section>
+            <section id="on_demand_splitting_1" data-background-color="#26273c" data-transition="slide">
+                <h3>On demand code splitting</h3>
+                <p>Create dynamic split points in application code</p>
+                <div class="fragment" data-markdown>
+                    ```js
+                    if(window.location.indexOf('admin') > 0)
+                    import('./adminModuleYouLikeToSplit').then( (module) => {
+                        //module available here
+                    })
+                    ```
+                </div>
+                <div class="fragment" data-markdown>
+                    ```js
+                    require.ensure([], () => {
+                        let module = require('./someModuleYouLikeToSplit'),
+                        anotherModule = require('./anotherModuleYouLikeToAdd');
+
+                        //modules available here
+                    })
+                    ```
+                </div>
+            </section>
+            <section id="on_demand_splitting_2" data-background-color="#26273c" data-transition="fade">
+                <h3>On demand code splitting</h3>
+                <p>Build files</p>
+                <div data-markdown>
+                    ```bash
+                    1. manifest.1sd1sd13.js
+                    2. lib.9sd8sd9t.js
+                    3. main.2sd5sds4.js
+                    4. main.568s4878.js #new chunk, webpack auto fetches it
+                    ```
+                </div>
+            </section>
+            <section id="webpack_dev_server" data-background-color="#35454D" data-transition="slide" data-background-transition="zoom">
+                <h2>Webpack dev server</h2>
+                <ul style="font-size:0.8em">
+                    <li class="fragment">Simple express server</li>
+                    <li class="fragment">Serves webpack assets from memory</li>
+                    <li class="fragment">Reloads the browser on change</li>
+                    <li class="fragment">Supports live reload &amp; HMR</li>
+                </ul>
+                <div class="fragment" data-markdown style="font-size:0.9em">
+                    ```bash
+                    $ npm install webpack-dev-server --save-dev
+                    ```
+                </div>
+                <div class="fragment" data-markdown style="font-size:0.9em">
+                    ```js
+                    devServer: {
+                        contentBase: path.resolve(__dirname, 'build'),
+                        host: 'localhost',
+                        port: '8080',
+                        proxy: 'http://localhost:8000'
+                    }
+                    ```
+                </div>
+                <div class="fragment" data-markdown style="font-size:0.9em">
+                    ```bash
+                    $ webpack-dev-server #through package.json's scripts
+                    ```
+                </div>
+            </section>
+            <section id="dynamic_file_reference_1" data-background-color="#43384a" data-transition="convex-in slide-out">
+                <h2>Dynamic file reference</h2>
+
+                <div style="width:55%;float:right">
+                    <h5>Dynamic<br/>
+                        <small><code>([name].[hash:8].js)</code></small>
+                    </h5>
+                    <blockquote>
+                        <ul>
+                            <li>main.df54s6df.js</li>
+                            <li>main.5441324s.js</li>
+                            <li>main.fbgfgh54.js</li>
+                        </ul>
+                    </blockquote>
+                </div>
+                <div style="width:45%;float:left;">
+                    <h5>Static <br />
+                        <small><code>([name].build.js)</code></small>
+                    </h5>
+
+                    <blockquote>
+                        <ul style="vertical-align:top;">
+                            <li>main.build.js</li>
+                            <li>main.build.js</li>
+                            <li>main.build.js</li>
+                        </ul>
+                    </blockquote>
+                </div>
+                <div class="fragment">
+                    <hr />
+                    <p>Change the js reference in html on each build?</p>
+                </div>
+                <h6 class="fragment">Not a good idea!</h6>
+            </section>
+            <section id="dynamic_file_reference_2" data-background-color="#43384a" data-transition="slide">
+                <h2>Dynamic file reference</h2>
+                <p>Single page application with one html entry file?</p>
+                <h5 class="fragment">Use "HtmlWebpackPlugin" !</h5>
+            </section>
+            <section id="dynamic_file_reference_3" data-background-color="#43384a" data-transition="slide">
+                <h2>Dynamic file reference</h2>
+                <p>Backend app generates html layout?</p>
+                <ol style="font-size:0.8em">
+                    <li class="fragment">Get asset manifest using "WebpackAssetsManifest" plugin</li>
+                    <li class="fragment">Use the asset manifest file on your backend code</li>
+                </ol>
+            </section>
+            <section id="dynamic_file_reference_4" data-background-color="#43384a" data-transition="slide-in convex-out">
+                <h2>Dynamic file reference</h2>
+                <div class="fragment current-visible" data-markdown>
+                    Get asset manifest
+                    ```js
+                    const WebpackAssetsManifest = require('webpack-assets-manifest');
+
+                    module.exports = {
+                        ...
+                        plugins: [
+                            new WebpackAssetsManifest({
+                                output: 'path/to/manifest.json'
+                            })
+                        ]
+                        ...
+                    }
+                    ```
+                </div>
+                <div class="fragment current-visible" data-markdown
+                style="position:absolute;left:0;right:0;top:20%"
+                >
+                A Sample manifest json file
+                ```json
+                {
+                    "lib.js": "/build/js/lib.27ab3f70.js",
+                    "main.css": "/build/style/main.2c2cca10.css",
+                    "main.js": "/build/js/main.2c2cca10.js",
+                    "manifest.js": "/build/js/manifest.d41d8cd9.js"
+                }
+                ```
+            </div>
+            <div class="fragment current-visible" data-markdown
+            style="position:absolute;left:0;right:0;top:20%"
+            >
+            Use asset manifest in your backend code
+            ```php
+            // backend layout code of a blade engine
+            &lt;link rel="stylesheet" href="{{ webpack_asset('main.css') }}" />
+            &lt;script src="{{ webpack_asset('manifest.js') }}">&lt;/script>
+            &lt;script src="{{ webpack_asset('lib.js') }}">&lt;/script>
+            &lt;script src="{{ webpack_asset('main.js') }}">&lt;/script>
+            ```
+            ```php
+            function webpack_asset( $asset ) {
+                $json = json_decode( file_get_contents('path/to/manifest.json') );
+                return $json->{ $asset };
+            }
+            ```
         </div>
-    </div>
+    </section>
+    <section id="few_other_features">
+        <h2>Few other features</h2>
+        <ul style="width:90%">
+            <li class="fragment">sourceMap
+                <pre><code data-trim class="js">
+                    { devtool: 'sourceMap' }
+                </code></pre>
+            </li>
+            <li class="fragment">Dynamic require
+                <pre><code data-trim class="js">
+                    require('template/' + name + '.js');
+                </code></pre>
+            </li>
+            <li class="fragment">Tree shaking</li>
+        </ul>
+    </section>
+    <section id="few_useful_plugins">
+        <h2>Few useful plugins</h2>
+        <div style="width:80%; margin: auto">
+            <p class="fragment">ProvidePlugin<hr/></p>
+            <p class="fragment">OfflinePlugin<hr/></p>
+            <p class="fragment">ImageminPlugin<hr/></p>
+        </div>
+    </section>
+    <section id="live_project_code">
+        <h2>Live project code</h2>
+    </section>
+    <section id="questions">
+        <h2>Questions?</h2>
+        <aside class="notes">
+            <p>
+                Webpack has powers.
+                It also has pitfalls that one can easily fall under.
+                It leads to abuse webpack. It can do more harm to your app.
+                So, you should be careful &amp;
+                periodically check the application build
+                to make sure everything is good
+            </p>
+        </aside>
+    </section>
+    <section id="thank_you_all">
+        <h2>Thank you all !</h2>
+        <p>Have fun with webpack</p>
+    </section>
+</div>
+</div>
 </body>
 </html>

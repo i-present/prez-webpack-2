@@ -1,21 +1,20 @@
 let path = require('path'),
     webpack = require('webpack'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
-    ExtractTextPlugin = require('extract-text-webpack-plugin'),
-    extractCSS = new ExtractTextPlugin('build.[hash:8].css');
+    ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 let rules = [
     {
         test: /\.css$/,
-		loader: extractCSS.extract({
+		loader: ExtractTextPlugin.extract({
             fallbackLoader: 'style-loader',
             loader: 'css-loader'
         })
     },
-	{
-		test: /\.html$/,
-		loader: 'html-loader?interpolate'
-	},
+    {
+        test: /\.html$/,
+		loader: 'html-loader?minimize=false'
+    },
 	{
 		test: /\.(jpe?g|png|gif|webp)$/,
 		loader: 'file-loader?name=./img/[name].[hash:8].[ext]'
@@ -36,7 +35,7 @@ let rules = [
 ]
 
 let plugins = [
-	extractCSS,
+	new ExtractTextPlugin('build.[contenthash:8].css'),
 	new HtmlWebpackPlugin({
 		template: path.resolve(__dirname, 'src', 'view', 'index.html')
 	})
@@ -46,7 +45,8 @@ module.exports = {
     entry: path.resolve(__dirname, 'src', 'js', 'index.js'),
     output: {
         path: path.resolve(__dirname, 'build'),
-        filename: 'build.[hash:8].js'
+        filename: 'build.[chunkhash:8].js',
+        chunkFilename: 'build.[chunkhash:8].js'
     },
     module: {
         rules: rules
@@ -55,7 +55,6 @@ module.exports = {
     devServer: {
 		contentBase: path.resolve(__dirname, 'build'),
 		inline: true,
-		noInfo: true,
 		compress: true,
 		host: '0.0.0.0'
 	}
