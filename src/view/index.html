@@ -115,10 +115,10 @@
                         },
 
                         plugins: [
-                            new HtmlWebpackPlugin({
-                                template: path.resolve(__dirname, 'src/view/index.html')
-                            }),
-                            new SomeotherPlugin()
+                        new HtmlWebpackPlugin({
+                            template: path.resolve(__dirname, 'src/view/index.html')
+                        }),
+                        new SomeotherPlugin()
                         ]
 
                     }
@@ -356,9 +356,9 @@
                                 filename: '[name].[chunkhash:8].js'
                             },
                             plugins: [
-                                new webpack.optimize.CommonsChunkPlugin({
-                                    name: 'lib' //common bundle's name.
-                                })
+                            new webpack.optimize.CommonsChunkPlugin({
+                                name: 'lib' //common bundle's name.
+                            })
                             ]
                         }
                         ...
@@ -381,9 +381,9 @@
                                 filename: '[name].[chunkhash:8].js'
                             },
                             plugins: [
-                                new webpack.optimize.CommonsChunkPlugin({
-                                    names: [ 'lib', 'manifest' ] // libs + extracted manifest
-                                })
+                            new webpack.optimize.CommonsChunkPlugin({
+                                names: [ 'lib', 'manifest' ] // libs + extracted manifest
+                            })
                             ]
                         }
                         ...
@@ -428,7 +428,7 @@
                             ...
                         }
                         plugins: [
-                            new ExtractTextPlugin('[name].[contenthash:8].css')
+                        new ExtractTextPlugin('[name].[contenthash:8].css')
                         ]
                     }
                     ```
@@ -569,9 +569,9 @@
                     module.exports = {
                         ...
                         plugins: [
-                            new WebpackAssetsManifest({
-                                output: 'path/to/manifest.json'
-                            })
+                        new WebpackAssetsManifest({
+                            output: 'path/to/manifest.json'
+                        })
                         ]
                         ...
                     }
