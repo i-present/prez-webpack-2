@@ -4,32 +4,32 @@
     <meta charset="UTF-8">
     <title>Webpack 2</title>
     <meta name="author" content="Moorthy G">
-<link href="build.db91e81f.css" rel="stylesheet"></head>
+<link href="build.b43a468b.css" rel="stylesheet"></head>
 <body>
     <div class="reveal">
         <div class="slides">
-            <section id="introduction" data-background-color="#2B3A42">
+            <section id="introduction" data-background-color="#2b3942">
                 <h1>Webpack 2</h1>
                 <div id="indexSlide">
-                    <iframe data-src="https://webpack.js.org/" scrolling="no" width="100%" height="100%"></iframe>
+                    <img src="./img/webpack-flow.e5061fdf.jpg" alt="" />
                 </div>
                 <aside class="notes">
                     <ol>
-                        <li></li>
                         <li>
                             Webpack in simple words, is a module bundler.
                         </li>
                         <li>
-                            Module bundling is meant to reduce the http request to speedup the apps in http/1.1
-                            The new http/2 protocol addresses this issue &amp; request multiple file in one request.
+                            Module bundling is a practise meant to reduce the http request to speedup the apps in http/1.1
+                            The new http/2 protocol addresses this issue &amp; gets multiple file in one request.
                         </li>
-                        <li>Also meant to insist module programming.</li>
+                        <li>Webpack also meant to insist module programming. The more modular, the more managable code</li>
                         <li>
-                            Webpack can bundle everything into a single js file ( js, css, image, audio, video ).
+                            Webpack bundles every dependencies into a single js file ( js, css, image, audio, video ).
                             But, for the goodness of human race, Its not recommended.
-                            This is an extreme usecase of webpack.
+                            This is an extreme case of webpack.
                         </li>
                         <li>In webpack, everything is module. Not just javascript</li>
+                        <li>It adds all dependencies to dependency graph &amp; generates bundle</li>
                         <li>
                             It can do job of a task runner &amp; a module bundler.
                             with a proper configuration.
@@ -72,6 +72,11 @@
                     # via npm scripts
                     ```
                 </script></div>
+                <aside class="notes">
+                    <ul>
+                        <li>Config is a simple commonjs module that returns the config object</li>
+                    </ul>
+                </aside>
             </section>
             <section id="core_concepts">
                 <h2>Core concepts</h2>
@@ -110,10 +115,10 @@
                         },
 
                         plugins: [
-                            new HtmlWebpackPlugin({
-                                template: path.resolve(__dirname, 'src/view/index.html')
-                            }),
-                            new SomeotherPlugin()
+                        new HtmlWebpackPlugin({
+                            template: path.resolve(__dirname, 'src/view/index.html')
+                        }),
+                        new SomeotherPlugin()
                         ]
 
                     }
@@ -351,9 +356,9 @@
                                 filename: '[name].[chunkhash:8].js'
                             },
                             plugins: [
-                                new webpack.optimize.CommonsChunkPlugin({
-                                    name: 'lib' //common bundle's name.
-                                })
+                            new webpack.optimize.CommonsChunkPlugin({
+                                name: 'lib' //common bundle's name.
+                            })
                             ]
                         }
                         ...
@@ -376,9 +381,9 @@
                                 filename: '[name].[chunkhash:8].js'
                             },
                             plugins: [
-                                new webpack.optimize.CommonsChunkPlugin({
-                                    names: [ 'lib', 'manifest' ] // libs + extracted manifest
-                                })
+                            new webpack.optimize.CommonsChunkPlugin({
+                                names: [ 'lib', 'manifest' ] // libs + extracted manifest
+                            })
                             ]
                         }
                         ...
@@ -423,7 +428,7 @@
                             ...
                         }
                         plugins: [
-                            new ExtractTextPlugin('[name].[contenthash:8].css')
+                        new ExtractTextPlugin('[name].[contenthash:8].css')
                         ]
                     }
                     ```
@@ -564,9 +569,9 @@
                     module.exports = {
                         ...
                         plugins: [
-                            new WebpackAssetsManifest({
-                                output: 'path/to/manifest.json'
-                            })
+                        new WebpackAssetsManifest({
+                            output: 'path/to/manifest.json'
+                        })
                         ]
                         ...
                     }
@@ -638,7 +643,7 @@
                 Webpack has powers.
                 It also has pitfalls that one can easily fall under.
                 It leads to abuse webpack. It can do more harm to your app.
-                So, you should be careful &amp;
+                So, you should be careful configuring webpack &amp;
                 periodically check the application build
                 to make sure everything is good
             </p>
